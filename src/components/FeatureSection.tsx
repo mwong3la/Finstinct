@@ -43,7 +43,7 @@ export default function FeatureSection({
           const adventureIndex = Math.min(5, folderImages.length - 1)
           setCurrentImage(folderImages[adventureIndex]?.src || folderImages[Math.floor(folderImages.length / 2)]?.src || folderImages[0].src)
         } else {
-          setCurrentImage(folderImages[0].src)
+          setCurrentImage(folderImages[7].src)
         }
       }
     } else {

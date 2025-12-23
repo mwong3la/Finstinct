@@ -11,7 +11,7 @@ export default function Footer() {
                   href="#"
                   className="text-sm text-gray-600 hover:text-black transition-colors"
                 >
-                  Buy PetConnect
+                  Buy Finstinct
                 </a>
               </li>
               <li>
