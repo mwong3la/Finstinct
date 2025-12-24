@@ -197,10 +197,10 @@ export default function OrdersPage() {
                 <div key={order.id} className="border border-gray-200 rounded-lg overflow-hidden">
                   <div className="bg-gray-50 px-6 py-4 flex flex-wrap items-center justify-between gap-4 border-b border-gray-200">
                     <div className="flex flex-wrap items-center gap-6 text-sm">
-                      <div>
+                      {/* <div>
                         <p className="text-gray-600 uppercase text-xs mb-1">Order Placed</p>
                         <p className="font-medium text-black">{order.date}</p>
-                      </div>
+                      </div> */}
                       <div>
                         <p className="text-gray-600 uppercase text-xs mb-1">Total</p>
                         <p className="font-medium text-black">${order.total.toFixed(2)}</p>

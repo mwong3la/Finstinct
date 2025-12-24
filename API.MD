@@ -202,3 +202,9 @@ POST /api/Order/validate
   "orderId": 0,
   "stripeSessionId": "string"
 }
+
+
+ROLES
+user -1
+admin -2
+
