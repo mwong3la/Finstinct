@@ -162,3 +162,39 @@ public enum Status
 }
 
 ```
+
+UPLOAD FILE
+POST /api/Blob/upload
+binary file
+
+ADD PRODUCT
+POST /api/Product/addProduct
+
+{
+  "name": "string",
+  "price": 0,
+  "description": "string",
+  "imageURL": "string",
+  "deviceId": "string"
+}
+
+UPDATE PRODUCT
+PUT /api/Product/update/{Id}
+{
+  "name": "string",
+  "price": 0,
+  "description": "string",
+  "imageURL": "string",
+  "deviceId": "string"
+}
+
+DELETE PRODUCT
+DELETE /api/Product/delete/{Id}
+
+UPDATE ORDER
+PUT /api/Order/status/{Id}
+PARAMETERS updatedStatus
+Available values : 1, 2, 3, 4, 5, 6, 7, 8, 9
+
+VERIFY PAYMENT
+PUT /api/Payment/{stripeSessionId}
