@@ -43,6 +43,37 @@ export const useProduct = (id: number | null) => {
   });
 };
 
+export const useCreateProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: any) => productApi.createProduct(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+    },
+  });
+};
+
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: any }) => productApi.updateProduct(id, data),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ['product', variables.id] });
+    },
+  });
+};
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => productApi.deleteProduct(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+    },
+  });
+};
+
 // Order Queries
 export const useCreateOrder = () => {
   const queryClient = useQueryClient();
@@ -81,6 +112,18 @@ export const usePayForOrder = () => {
   });
 };
 
+export const useUpdateOrderStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ orderId, orderStatus }: { orderId: number; orderStatus: number }) =>
+      orderApi.updateOrderStatus(orderId, orderStatus),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['order', variables.orderId] });
+    },
+  });
+};
+
 // Payment Queries
 export const useMakePayment = () => {
   const queryClient = useQueryClient();
@@ -97,6 +140,13 @@ export const usePaymentHistory = (userId: number | null) => {
     queryKey: ['paymentHistory', userId],
     queryFn: () => paymentApi.getPaymentHistory(userId!),
     enabled: !!userId,
+  });
+};
+
+export const useAllPayments = () => {
+  return useQuery({
+    queryKey: ['allPayments'],
+    queryFn: () => paymentApi.getAllPayments(),
   });
 };
 

@@ -101,14 +101,14 @@ export default function PaymentHistoryPage() {
                         {payment.status && (
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              payment.status === 'completed' || payment.status === 'success'
+                              payment.status === 2
                                 ? 'text-green-600 bg-green-50'
-                                : payment.status === 'pending'
+                                : payment.status === 1
                                 ? 'text-orange-600 bg-orange-50'
                                 : 'text-gray-600 bg-gray-50'
                             }`}
                           >
-                            {payment.status}
+                            {payment.status === 1 ? 'Not Paid' : payment.status === 2 ? 'Paid' : 'Unknown'}
                           </span>
                         )}
                       </div>

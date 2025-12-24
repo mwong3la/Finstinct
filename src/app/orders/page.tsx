@@ -35,11 +35,11 @@ export default function OrdersPage() {
       orderStatus: order.orderStatus,
       paymentStatus: order.paymentStatus,
       total: order.total || 0,
-      items: order.orderItems?.map((item, idx) => ({
+      items: (order.items || order.orderItems)?.map((item, idx) => ({
         id: item.productId?.toString() || idx.toString(),
-        name: `Product ${item.productId}`,
+        name: item.productName || `Product ${item.productId}`,
         image: getDefaultProductImage(item.productId || idx),
-        price: 0, // Price not in API response
+        price: item.unitPrice || 0,
         quantity: item.quantity || 1,
       })) || [],
     }))
@@ -47,14 +47,24 @@ export default function OrdersPage() {
 
   const getOrderStatusColor = (status: number) => {
     switch (status) {
-      case 3: // delivered
+      case 5: // Delivered
         return "text-green-600 bg-green-50"
-      case 2: // shipped
+      case 4: // Shipped
         return "text-blue-600 bg-blue-50"
-      case 1: // processing
+      case 3: // Processing
         return "text-orange-600 bg-orange-50"
-      case 0: // pending
+      case 2: // Paid
+        return "text-purple-600 bg-purple-50"
+      case 1: // Pending
         return "text-gray-600 bg-gray-50"
+      case 6: // Cancelled
+        return "text-red-600 bg-red-50"
+      case 7: // Refunded
+        return "text-yellow-600 bg-yellow-50"
+      case 8: // Failed
+        return "text-red-600 bg-red-50"
+      case 9: // Returned
+        return "text-orange-600 bg-orange-50"
       default:
         return "text-gray-600 bg-gray-50"
     }
@@ -62,14 +72,24 @@ export default function OrdersPage() {
 
   const getOrderStatusText = (status: number) => {
     switch (status) {
-      case 3:
-        return "Delivered"
-      case 2:
-        return "Shipped"
       case 1:
-        return "Processing"
-      case 0:
         return "Pending"
+      case 2:
+        return "Paid"
+      case 3:
+        return "Processing"
+      case 4:
+        return "Shipped"
+      case 5:
+        return "Delivered"
+      case 6:
+        return "Cancelled"
+      case 7:
+        return "Refunded"
+      case 8:
+        return "Failed"
+      case 9:
+        return "Returned"
       default:
         return "Unknown"
     }
@@ -77,11 +97,9 @@ export default function OrdersPage() {
 
   const getPaymentStatusColor = (status: number) => {
     switch (status) {
-      case 1: // paid
+      case 2: // Paid
         return "text-green-600 bg-green-50"
-      case 2: // failed
-        return "text-red-600 bg-red-50"
-      case 0: // pending
+      case 1: // NotPaid
         return "text-orange-600 bg-orange-50"
       default:
         return "text-gray-600 bg-gray-50"
@@ -91,11 +109,9 @@ export default function OrdersPage() {
   const getPaymentStatusText = (status: number) => {
     switch (status) {
       case 1:
-        return "Paid"
+        return "Not Paid"
       case 2:
-        return "Failed"
-      case 0:
-        return "Pending"
+        return "Paid"
       default:
         return "Unknown"
     }
@@ -235,7 +251,7 @@ export default function OrdersPage() {
                       >
                         View order details
                       </Link>
-                      {order.orderStatus === 3 && (
+                      {order.orderStatus === 5 && (
                         <button className="text-blue-600 text-sm hover:underline font-medium">
                           Return or replace
                         </button>

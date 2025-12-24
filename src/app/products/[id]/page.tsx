@@ -79,7 +79,7 @@ export default function ProductDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden relative">
               <Image
-                src={product.image || getDefaultProductImage(product.id)}
+                src={product.imageURL || product.image || getDefaultProductImage(product.id)}
                 alt={product.name || `Product ${product.id}`}
                 fill
                 className="object-contain"
