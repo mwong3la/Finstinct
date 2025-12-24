@@ -4,6 +4,7 @@ export interface User {
   email: string;
   name: string;
   phone: string;
+  role?: number; // 1 = user, 2 = admin
 }
 
 export interface LoginRequest {
@@ -30,7 +31,8 @@ export interface Product {
   name?: string;
   description?: string;
   price?: number;
-  image?: string;
+  image?: string; // Legacy support
+  imageURL?: string; // New field from backend
   [key: string]: any;
 }
 
@@ -38,6 +40,8 @@ export interface Product {
 export interface OrderItem {
   productId: number;
   quantity: number;
+  productName?: string; // From order details response
+  unitPrice?: number; // From order details response
   [key: string]: any;
 }
 
@@ -48,12 +52,13 @@ export interface CreateOrderRequest {
 
 export interface Order {
   id: number;
-  orderItems: OrderItem[];
-  orderStatus: number; // 0 = pending, 1 = processing, 2 = shipped, 3 = delivered, etc.
-  paymentStatus: number; // 0 = pending, 1 = paid, 2 = failed, etc.
-  stripeSessionId: string | null;
-  paymentIntentId: string | null;
-  userId: number;
+  orderItems?: OrderItem[]; // Legacy support
+  items?: OrderItem[]; // New field from order details response
+  orderStatus: number; // 1 = Pending, 2 = Paid, 3 = Processing, 4 = Shipped, 5 = Delivered, 6 = Cancelled, 7 = Refunded, 8 = Failed, 9 = Returned
+  paymentStatus: number; // 1 = NotPaid, 2 = Paid
+  stripeSessionId?: string | null;
+  paymentIntentId?: string | null;
+  userId?: number;
   total: number;
   createdAt?: string;
   [key: string]: any;
@@ -71,8 +76,33 @@ export interface PaymentHistory {
   id: number;
   userId: number;
   amount: number;
-  status?: string;
+  status?: number; // 1 = NotPaid, 2 = Paid
   createdAt?: string;
   [key: string]: any;
+}
+
+// Product CRUD Types
+export interface CreateProductRequest {
+  name: string;
+  description?: string;
+  price: number;
+  image?: string; // Legacy
+  imageURL?: string; // New field
+  deviceId?: string;
+  [key: string]: any;
+}
+
+export interface UpdateProductRequest {
+  name?: string;
+  description?: string;
+  price?: number;
+  image?: string; // Legacy
+  imageURL?: string; // New field
+  deviceId?: string;
+  [key: string]: any;
+}
+
+export interface UpdateOrderStatusRequest {
+  orderStatus: number;
 }
 

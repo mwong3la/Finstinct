@@ -4,10 +4,19 @@ import { usePaymentHistory, useMakePayment } from "@/lib/api/queries"
 import { useAuth } from "@/contexts/AuthContext"
 import Link from "next/link"
 import { PaymentHistorySkeleton } from "@/components/loading-skeletons"
+import { useEffect, useState } from "react"
+import { getUserIdFromStorage } from "@/lib/userUtils"
 
 export default function PaymentHistoryPage() {
-  const { user, isAuthenticated } = useAuth()
-  const { data: payments = [], isLoading, error } = usePaymentHistory(user?.id || null)
+  const { user, userId, isAuthenticated } = useAuth()
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null)
+  
+  useEffect(() => {
+    const id = userId || user?.id || getUserIdFromStorage()
+    setCurrentUserId(id)
+  }, [userId, user])
+  
+  const { data: payments = [], isLoading, error } = usePaymentHistory(currentUserId)
   const makePaymentMutation = useMakePayment()
 
   if (!isAuthenticated) {
@@ -101,14 +110,14 @@ export default function PaymentHistoryPage() {
                         {payment.status && (
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              payment.status === 'completed' || payment.status === 'success'
+                              payment.status === 2
                                 ? 'text-green-600 bg-green-50'
-                                : payment.status === 'pending'
+                                : payment.status === 1
                                 ? 'text-orange-600 bg-orange-50'
                                 : 'text-gray-600 bg-gray-50'
                             }`}
                           >
-                            {payment.status}
+                            {payment.status === 1 ? 'Not Paid' : payment.status === 2 ? 'Paid' : 'Unknown'}
                           </span>
                         )}
                       </div>

@@ -81,7 +81,7 @@ export default function ProductsPage() {
                 >
                   <div className="aspect-square bg-gray-50 relative overflow-hidden">
                     <Image
-                      src={product.image || getDefaultProductImage(index)}
+                      src={product.imageURL || product.image || getDefaultProductImage(index)}
                       alt={product.name || `Product ${product.id}`}
                       fill
                       className="object-contain group-hover:scale-105 transition-transform"

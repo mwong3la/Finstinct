@@ -133,7 +133,7 @@ export default function ProductShowcase() {
                   }}
                 >
                   <Image
-                    src={product.image || "/placeholder.svg"}
+                    src={ product.image || "/placeholder.svg"}
                     alt={product.title}
                     fill
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"

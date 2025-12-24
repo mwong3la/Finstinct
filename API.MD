@@ -141,5 +141,70 @@
 ]
 ```
 
+```json
+public enum OrderStatus
+{
+    Pending = 1,
+    Paid = 2,
+    Processing = 3,
+    Shipped = 4,
+    Delivered = 5,
+    Cancelled = 6,
+    Refunded = 7,
+    Failed = 8,
+    Returned = 9
+}
+
+public enum Status
+{
+    NotPaid = 1,
+    Paid = 2,
+}
+
 ```
-```
+
+UPLOAD FILE
+POST /api/Blob/upload
+binary file
+
+ADD PRODUCT
+POST /api/Product/addProduct
+
+{
+  "name": "string",
+  "price": 0,
+  "description": "string",
+  "imageURL": "string",
+  "deviceId": "string"
+}
+
+UPDATE PRODUCT
+PUT /api/Product/update/{Id}
+{
+  "name": "string",
+  "price": 0,
+  "description": "string",
+  "imageURL": "string",
+  "deviceId": "string"
+}
+
+DELETE PRODUCT
+DELETE /api/Product/delete/{Id}
+
+UPDATE ORDER
+PUT /api/Order/status/{Id}
+PARAMETERS updatedStatus
+Available values : 1, 2, 3, 4, 5, 6, 7, 8, 9
+
+VALIDATE PAYMENT
+POST /api/Order/validate
+{
+  "orderId": 0,
+  "stripeSessionId": "string"
+}
+
+
+ROLES
+user -1
+admin -2
+
