@@ -113,14 +113,24 @@ export default function OrderDetailPage() {
 
   const getOrderStatusColor = (status: number) => {
     switch (status) {
-      case 3: // delivered
+      case 5: // Delivered
         return "text-green-600 bg-green-50"
-      case 2: // shipped
+      case 4: // Shipped
         return "text-blue-600 bg-blue-50"
-      case 1: // processing
+      case 3: // Processing
         return "text-orange-600 bg-orange-50"
-      case 0: // pending
+      case 2: // Paid
+        return "text-purple-600 bg-purple-50"
+      case 1: // Pending
         return "text-gray-600 bg-gray-50"
+      case 6: // Cancelled
+        return "text-red-600 bg-red-50"
+      case 7: // Refunded
+        return "text-yellow-600 bg-yellow-50"
+      case 8: // Failed
+        return "text-red-600 bg-red-50"
+      case 9: // Returned
+        return "text-orange-600 bg-orange-50"
       default:
         return "text-gray-600 bg-gray-50"
     }
@@ -128,14 +138,24 @@ export default function OrderDetailPage() {
 
   const getOrderStatusText = (status: number) => {
     switch (status) {
-      case 3:
-        return "Delivered"
-      case 2:
-        return "Shipped"
       case 1:
-        return "Processing"
-      case 0:
         return "Pending"
+      case 2:
+        return "Paid"
+      case 3:
+        return "Processing"
+      case 4:
+        return "Shipped"
+      case 5:
+        return "Delivered"
+      case 6:
+        return "Cancelled"
+      case 7:
+        return "Refunded"
+      case 8:
+        return "Failed"
+      case 9:
+        return "Returned"
       default:
         return "Unknown"
     }
@@ -143,11 +163,9 @@ export default function OrderDetailPage() {
 
   const getPaymentStatusColor = (status: number) => {
     switch (status) {
-      case 1: // paid
+      case 2: // Paid
         return "text-green-600 bg-green-50"
-      case 2: // failed
-        return "text-red-600 bg-red-50"
-      case 0: // pending
+      case 1: // NotPaid
         return "text-orange-600 bg-orange-50"
       default:
         return "text-gray-600 bg-gray-50"
@@ -157,11 +175,9 @@ export default function OrderDetailPage() {
   const getPaymentStatusText = (status: number) => {
     switch (status) {
       case 1:
-        return "Paid"
+        return "Not Paid"
       case 2:
-        return "Failed"
-      case 0:
-        return "Pending"
+        return "Paid"
       default:
         return "Unknown"
     }
@@ -217,14 +233,14 @@ export default function OrderDetailPage() {
               <h2 className="text-lg font-semibold text-black">Order Items</h2>
             </div>
             <div className="p-6">
-              {order.orderItems && order.orderItems.length > 0 ? (
+              {(order.items || order.orderItems) && (order.items || order.orderItems)!.length > 0 ? (
                 <div className="space-y-4">
-                  {order.orderItems.map((item: any, idx: number) => (
+                  {(order.items || order.orderItems)!.map((item: any, idx: number) => (
                     <div key={idx} className="flex gap-4 pb-4 border-b border-gray-200 last:border-0 last:pb-0">
                       <div className="flex-shrink-0 w-24 h-24 bg-gray-50 rounded-lg overflow-hidden">
                         <Image
                           src={getDefaultProductImage(item.productId || idx)}
-                          alt={`Product ${item.productId}`}
+                          alt={item.productName || `Product ${item.productId}`}
                           width={96}
                           height={96}
                           className="w-full h-full object-contain"
@@ -232,9 +248,14 @@ export default function OrderDetailPage() {
                       </div>
                       <div className="flex-1">
                         <h3 className="text-lg font-semibold text-black mb-1">
-                          Product {item.productId}
+                          {item.productName || `Product ${item.productId}`}
                         </h3>
-                        <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                        <p className="text-sm text-gray-600 mb-1">Quantity: {item.quantity}</p>
+                        {item.unitPrice !== undefined && (
+                          <p className="text-sm font-medium text-black">
+                            ${item.unitPrice.toFixed(2)} each
+                          </p>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -253,7 +274,7 @@ export default function OrderDetailPage() {
                   ${order.total.toFixed(2)}
                 </span>
               </div>
-              {order.paymentStatus !== 1 && (
+              {order.paymentStatus !== 2 && (
                 <button
                   onClick={handlePayment}
                   disabled={isProcessingPayment || payForOrderMutation.isPending}
@@ -264,7 +285,7 @@ export default function OrderDetailPage() {
                     : "Pay Now"}
                 </button>
               )}
-              {order.paymentStatus === 1 && (
+              {order.paymentStatus === 2 && (
                 <div className="text-center text-green-600 text-sm font-medium">
                   ✓ Payment Completed
                 </div>
